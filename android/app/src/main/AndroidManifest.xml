@@ -3,7 +3,8 @@
   ~ All rights reserved.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools">
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
      calls FlutterMain.startInitialization(this); in its onCreate method.
      In most cases you can leave this as-is, but you if you want to provide
@@ -42,7 +43,7 @@
 
     <application
             android:name="${applicationName}"
-        android:label="Mobileraker"
+        android:label="Mobileraker+"
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -69,6 +70,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Personal build: no Firebase project / ads, keep all SDK collection off -->
+        <meta-data android:name="firebase_analytics_collection_deactivated" android:value="true" />
+        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
+        <meta-data android:name="firebase_messaging_auto_init_enabled" android:value="false" tools:replace="android:value" />
+        <meta-data android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT" android:value="true" />
         <meta-data
                 android:name="com.google.android.gms.ads.APPLICATION_ID"
                 android:value="ca-app-pub-9024548154217588~5619617321"/>

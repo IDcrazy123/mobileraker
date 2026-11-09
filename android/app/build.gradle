@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.mobileraker.android"
+        applicationId = "com.mobileraker.personal"
         minSdk = 25
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
@@ -53,6 +53,7 @@ android {
 
     signingConfigs {
         release {
+            // Keep the personal signing key in an ignored local key.properties file.
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
@@ -62,7 +63,12 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.release
+            signingConfig = keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
+            // No Firebase project behind this build, so never try to upload crash mapping files.
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+                nativeSymbolUploadEnabled false
+            }
         }
     }
 }

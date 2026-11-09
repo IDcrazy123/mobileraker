@@ -1,0 +1,51 @@
+name: Personal APK
+
+on:
+  push:
+    branches: [codex/personal-apk]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.4'
+          cache: true
+      - name: Create local-only Firebase placeholder
+        shell: bash
+        run: |
+          cat > android/app/google-services.json <<'EOF'
+          {
+            "project_info": {"project_number":"000000000000","project_id":"mobileraker-personal","storage_bucket":"mobileraker-personal.appspot.com"},
+            "client": [{"client_info":{"mobilesdk_app_id":"1:000000000000:android:0000000000000000","android_client_info":{"package_name":"com.mobileraker.personal"}},"oauth_client":[],"api_key":[{"current_key":"AIzaSyDUMMY-personal-build-0000000000000"}],"services":{"appinvite_service":{"other_platform_oauth_client":[]}}}],
+            "configuration_version":"1"
+          }
+          EOF
+      - name: Generate Dart code
+        run: |
+          (cd common && flutter pub get && dart run build_runner build)
+          (cd pro && flutter pub get && dart run build_runner build)
+          flutter pub get
+          dart run build_runner build
+      - name: Check Pro parser
+        run: cd pro && flutter test test/gcode_parser_test.dart
+      - name: Check Dart errors
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings lib pro/lib
+      - name: Build APKs
+        run: flutter build apk --release --split-per-abi --target-platform android-arm64,android-arm,android-x64
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mobileraker-personal-apks
+          path: build/app/outputs/flutter-apk/*.apk
+          if-no-files-found: error
