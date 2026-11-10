@@ -31,7 +31,7 @@ cd common && flutter pub get && dart run build_runner build && cd ..
 cd pro && flutter pub get && dart run build_runner build && cd ..
 flutter pub get
 dart run build_runner build
-flutter build apk --release --split-per-abi --target-platform android-arm64,android-arm,android-x64
+flutter build apk --release --split-per-abi --target-platform android-arm64
 ```
 
 The ARM64 APK is `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.

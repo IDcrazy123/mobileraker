@@ -64,6 +64,9 @@ android {
     buildTypes {
         release {
             signingConfig = keystorePropertiesFile.exists() ? signingConfigs.release : signingConfigs.debug
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             // No Firebase project behind this build, so never try to upload crash mapping files.
             firebaseCrashlytics {
                 mappingFileUploadEnabled false

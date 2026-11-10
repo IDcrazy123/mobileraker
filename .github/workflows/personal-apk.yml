@@ -42,10 +42,10 @@ jobs:
         run: cd pro && flutter test test/gcode_parser_test.dart
       - name: Check Dart errors
         run: flutter analyze --no-fatal-infos --no-fatal-warnings lib pro/lib
-      - name: Build APKs
-        run: flutter build apk --release --split-per-abi --target-platform android-arm64,android-arm,android-x64
+      - name: Build ARM64 APK
+        run: flutter build apk --release --split-per-abi --target-platform android-arm64
       - uses: actions/upload-artifact@v4
         with:
-          name: mobileraker-personal-apks
+          name: mobileraker-personal-arm64
           path: build/app/outputs/flutter-apk/*.apk
           if-no-files-found: error
