@@ -595,9 +595,10 @@ class _GCodeFileDetailsController extends _$GCodeFileDetailsController {
   _Model build() {
     ref.keepAliveFor();
     talker.info('Buildign GCodeFileDetailsController');
-    canPrintCalc(PrintState? d) => d != null && (d != PrintState.printing || d != PrintState.paused);
     final gCodeFile = ref.watch(_gcodeProvider);
     final klippy = ref.watch(klipperProvider(machineUUID)).value;
+    canPrintCalc(PrintState? d) =>
+        klippy?.klippyCanReceiveCommands == true && d != null && d != PrintState.printing && d != PrintState.paused;
     final printer = ref.read(printerProvider(machineUUID)).value;
     ref.listen(printerProvider(machineUUID), (previous, next) {
       if (previous?.value?.print.state != next.value?.print.state) {
@@ -632,7 +633,8 @@ class _GCodeFileDetailsController extends _$GCodeFileDetailsController {
 
       ref.listen(activeSpoolProvider(machineUUID), (previous, next) {
         if (previous?.value != next.value) {
-          final res = spoolCalc(next.value!);
+          final nextSpool = next.value;
+          final res = nextSpool == null ? (null, null) : spoolCalc(nextSpool);
           state = state.copyWith(
             insufficientFilament: res.$1,
             materialMissmatch: res.$2,
@@ -650,7 +652,7 @@ class _GCodeFileDetailsController extends _$GCodeFileDetailsController {
 
     return _Model(
       file: gCodeFile,
-      canStartPrint: klippy?.klippyCanReceiveCommands == true && canPrintCalc(printer?.print.state),
+      canStartPrint: canPrintCalc(printer?.print.state),
       machineUUID: machineUUID,
       insufficientFilament: insufficientFilament,
       materialMissmatch: materialMissmatch,

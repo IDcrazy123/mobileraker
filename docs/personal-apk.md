@@ -1,6 +1,8 @@
 # Personal Android build
 
 This branch starts from the upstream `master` at `fc74f54` (Mobileraker 2.9.14).
+See [upstream-stability-review.md](upstream-stability-review.md) for the selected
+fixes backported from the unreleased upstream `dev` branch.
 The local `pro/` package adapts the independent, non-commercial implementation
 from [westfrost/mobileraker `premium`](https://github.com/westfrost/mobileraker/tree/premium/pro).
 The original Mobileraker licenses and copyright notices remain in the repository.
@@ -35,9 +37,13 @@ flutter build apk --release --split-per-abi --target-platform android-arm64
 ```
 
 The ARM64 APK is `build/app/outputs/flutter-apk/app-arm64-v8a-release.apk`.
+Tested APKs for personal use are published in the fork's GitHub Releases.
 On GitHub, the **Personal APK** workflow builds the same source and attaches
 APKs as workflow artifacts. Without `android/key.properties`, builds use the
 Android debug signing key; that key can differ between machines or CI runs.
+The workflow artifacts are for build verification and may not install as an
+update over a locally signed release. Use the APK attached to a Release for
+repeatable phone updates.
 
 For repeatable updates on one phone, generate a private release keystore
 locally and put its settings in `android/key.properties` (`storeFile`,

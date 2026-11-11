@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.9.14+582
+version: 2.9.14+583
 
 environment:
   sdk: '>=3.8.0 <4.0.0'
@@ -179,7 +179,8 @@ dev_dependencies:
   # riverpod_lint makes it easier to work with Riverpod
   # riverpod_lint and custom_lint removed: requires Dart 3.10+ for compatibility with riverpod 3.2+
   # Re-add riverpod_lint: ^3.1.1 and custom_lint: ^0.8.1 when upgrading to Dart 3.10+
-  flutter_native_splash: ^2.4.6
+  # Native splash assets are already checked in. Keep their generator out of
+  # the release plugin registry because it is not a runtime Android plugin.
   flutter_launcher_icons: ^0.14.1
   dart_code_metrics_presets: ^2.5.0
 

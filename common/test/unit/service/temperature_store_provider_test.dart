@@ -77,6 +77,18 @@ void main() {
     verify(mockRpc.sendJRpcMethod('server.temperature_store')).called(1);
   });
 
+  test('starts with an empty temperature store when history fetch times out', () async {
+    final mockRpc = MockJsonRpcClient();
+    when(mockRpc.sendJRpcMethod('server.temperature_store'))
+        .thenAnswer((_) async => throw JRpcTimeoutError('temperature history timed out'));
+
+    final container = makeContainer(mockRpc);
+    final store = await container.read(temperatureStoresProvider(uuid).future);
+
+    expect(store, isEmpty);
+    verify(mockRpc.sendJRpcMethod('server.temperature_store')).called(1);
+  });
+
   test('parses temperature_sensor entries as TemperatureSensorSeriesEntry', () async {
     final mockRpc = MockJsonRpcClient();
 

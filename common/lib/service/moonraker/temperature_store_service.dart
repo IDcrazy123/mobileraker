@@ -90,7 +90,13 @@ class TemperatureStores extends _$TemperatureStores {
     if (!ref.mounted) return const {};
     final ordering = await ref.watch(machineSettingsProvider(machineUUID).selectAsync((s) => s.tempOrdering));
     if (!ref.mounted) return const {};
-    await _fetchAndPopulate(ordering);
+    try {
+      await _fetchAndPopulate(ordering);
+    } catch (e, s) {
+      // Printer updates will fill the history after a slow request times out.
+      talker.warning('$_tag Failed to fetch temperature store from server, starting with an empty store', e, s);
+      _data.clear();
+    }
     if (!ref.mounted) return const {};
 
 

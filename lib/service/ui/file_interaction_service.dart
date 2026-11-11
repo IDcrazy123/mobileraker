@@ -283,7 +283,8 @@ class FileInteractionService {
 
   Stream<FileInteractionMenuEvent> renameFileAction(RemoteFile file, List<String>? usedNames) async* {
     usedNames ??= await _fileService.fetchDirectoryInfo(file.parentPath).then((e) => e.folderFileNames);
-    usedNames!.remove(file.name);
+    final otherNames = {...usedNames!}..remove(file.name);
+    final extension = file.fileExtension?.let((it) => '.$it') ?? '';
 
     var dialogResponse = await _dialogService.show(
       DialogRequest(
@@ -300,7 +301,8 @@ class FileInteractionService {
               RegExp(r'^\w?[\w .-]*[\w-]$'),
               errorText: tr('pages.files.no_matches_file_pattern'),
             ),
-            notContains(usedNames, errorText: tr('form_validators.file_name_in_use')),
+            (String? value) =>
+                value != null && otherNames.contains('$value$extension') ? tr('form_validators.file_name_in_use') : null,
           ]),
         ),
       ),

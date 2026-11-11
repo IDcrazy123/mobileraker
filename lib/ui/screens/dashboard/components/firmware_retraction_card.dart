@@ -109,7 +109,7 @@ class FirmwareRetractionSlidersOrTexts extends HookConsumerWidget {
 
     return AsyncGuard(
       debugLabel: 'FirmwareRetractionSlidersOrTexts-$machineUUID',
-      toGuard: _firmwareRetractionCardControllerProvider(machineUUID).selectAs((data) => true),
+      toGuard: _firmwareRetractionCardControllerProvider(machineUUID).selectAs((data) => data.showCard),
       childOnLoading: const _FirmwareRetractionSlidersOrTextsLoading(),
       childOnData: _CardBody(machineUUID: machineUUID),
     );

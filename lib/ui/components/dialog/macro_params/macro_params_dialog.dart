@@ -87,7 +87,7 @@ class _MacroParamsDialog extends ConsumerWidget {
 
     formKey.saveAndValidate();
 
-    var paramsValuesMap = formKey.value.cast<String, String>();
+    var paramsValuesMap = formKey.value.map((key, value) => MapEntry(key, value?.toString() ?? ''));
     ref.read(dialogCompleter)(DialogResponse.confirmed(paramsValuesMap));
   }
 }
